@@ -21,7 +21,7 @@ export const EmployeeCardComponent = ({employee}: Props) => {
         <Text variant='labelLarge'>Nombre: {employee.name}</Text>
         <Text variant='bodyMedium'>Área de trabajo: {employee.workArea}</Text>
       </View>
-      <View style={styles.iconEnd}>
+      <View style={styles.iconEndEdit}>
         <IconButton
           icon="plus-circle-outline"
           size={25}

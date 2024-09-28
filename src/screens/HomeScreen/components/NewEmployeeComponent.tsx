@@ -5,7 +5,7 @@ import { styles } from '../../../theme/styles'
 import { SnackbarComponent } from '../../components/SnackbarComponent'
 import { Message } from '../../LoginScreen'
 import { push, ref, set } from 'firebase/database'
-import { dbRealTime } from '../../../config/firebaseConfig'
+import { auth, dbRealTime } from '../../../config/firebaseConfig'
 
 // interface - Employee
 interface FormEmployee {
@@ -60,7 +60,7 @@ export const NewEmployeeComponent = ({ showModalEmployee, setShowModalEmployee }
     }
 
     // Crear el path a la tabla de la BDD
-    const dbRef = ref(dbRealTime, 'employees');
+    const dbRef = ref(dbRealTime, 'employees/' + auth.currentUser?.uid);
     // Crear una colección que agregue los datos
     const saveEmployee = push(dbRef);
 

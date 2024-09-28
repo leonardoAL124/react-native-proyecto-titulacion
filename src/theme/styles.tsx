@@ -68,6 +68,11 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 35
   },
+  inputsTogetherInfo: {
+    marginTop: 5,
+    flexDirection: 'row',
+    gap: 17
+  },
   rootInfo: {
     flex: 1,
     padding: 20,
@@ -77,6 +82,10 @@ export const styles = StyleSheet.create({
   textInfo: {
     fontWeight: 'bold',
     fontSize: 18
+  },
+  iconSignOut: {
+    marginTop: 20,
+    alignItems: 'center'
   }
 
 });

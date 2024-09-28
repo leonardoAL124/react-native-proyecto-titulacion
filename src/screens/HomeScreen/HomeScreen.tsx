@@ -40,14 +40,15 @@ export const HomeScreen = () => {
     getAllEmployees();
   }, [])
 
-
   const getAllEmployees = () => {
     // Direccionar a la tabla de la DBB
-    const dbRef = ref(dbRealTime, 'employees');
+    const dbRef = ref(dbRealTime, 'employees/' + auth.currentUser?.uid);
     // Acceder a la data
     onValue(dbRef, (snapshot) => {
       // Capturar la data
       const data = snapshot.val();
+      // Verificar que existe data
+      if (!data) return;
       // Obtener las keys de cada dato
       const getKeys = Object.keys(data);
       // Crear un arreglo para almacenar los productos
@@ -66,7 +67,7 @@ export const HomeScreen = () => {
     <>
       <View style={styles.rootHome}>
         <View style={styles.headerRow}>
-          <Avatar.Text size={50} label="IM" />
+          <Avatar.Text size={50} label="AD" />
           <View>
             <Text variant='bodySmall'>Area de administración</Text>
             <Text variant='labelLarge'>{userData?.displayName}</Text>

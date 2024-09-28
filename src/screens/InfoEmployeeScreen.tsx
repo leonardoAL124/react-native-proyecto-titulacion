@@ -3,8 +3,8 @@ import { View } from 'react-native'
 import { Button, Divider, Text, TextInput } from 'react-native-paper'
 import { styles } from '../theme/styles'
 import { Employee } from './HomeScreen/HomeScreen'
-import { ref, update } from 'firebase/database'
-import { dbRealTime } from '../config/firebaseConfig'
+import { ref, remove, update } from 'firebase/database'
+import { auth, dbRealTime } from '../config/firebaseConfig'
 import { Message } from './LoginScreen'
 import { SnackbarComponent } from './components/SnackbarComponent'
 import { useNavigation, useRoute } from '@react-navigation/native'
@@ -50,7 +50,7 @@ export const InfoEmployeeScreen = () => {
 
   const handleUpdateEmployee = async () => {
     // Direccionar al dato en la tabla de la BDD
-    const dbRef = ref(dbRealTime, 'employees/' + formEdit.id);
+    const dbRef = ref(dbRealTime, 'employees/' + auth.currentUser?.uid + '/' + formEdit.id);
 
     try {
       // Actualizar el dato seleccionado
@@ -75,6 +75,25 @@ export const InfoEmployeeScreen = () => {
       });
     }
     navigation.goBack();
+  }
+
+  // Función para eliminar el empleado
+  const handleDeleteEmployee = async () => {
+    // Redireccionar a la tabla y dato a eliminar
+    const dbRef = ref(dbRealTime, 'employees/' + auth.currentUser?.uid + '/' + formEdit.id);
+
+    try {
+      // Eliminar el producto
+      await remove(dbRef);
+      // Regresar
+      navigation.goBack();
+    } catch (e) {
+      setShowMessage({
+        visible: true,
+        message: 'No se logró completar la eliminación, intente más tarde!',
+        color: '#7a0808'
+      });
+    }
   }
 
   return (
@@ -102,11 +121,11 @@ export const InfoEmployeeScreen = () => {
           value={formEdit.phoneNumber}
           onChangeText={(value) => handleSetValues('phoneNumber', value)}
         />
-        <View style={styles.inputsTogether}>
+        <View style={styles.inputsTogetherInfo}>
           <Text style={styles.textInfo}>Edad: </Text>
           <TextInput
             value={formEdit.age.toString()}
-            style={{ width: '20%' }}
+            style={{ width: '13%' }}
             onChangeText={(value) => handleSetValues('age', value)}
           />
           <Text style={styles.textInfo}>Área de trabajo: </Text>
@@ -118,6 +137,7 @@ export const InfoEmployeeScreen = () => {
         </View>
       </View>
       <Button mode='contained' icon='update' onPress={handleUpdateEmployee}>Actualizar</Button>
+      <Button mode='contained' icon='delete-outline' onPress={handleDeleteEmployee}>Eliminar</Button>
       <SnackbarComponent showMessage={showMessage} setShowMessage={setShowMessage} />
     </View>
   )

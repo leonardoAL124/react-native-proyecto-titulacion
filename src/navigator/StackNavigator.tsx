@@ -18,16 +18,12 @@ interface Routes {
   title?: string,
 }
 
-// Rutas accesibles al no estar autenticado
-const routesNoAuth: Routes[] = [
+// Rutas 
+const routes: Routes[] = [
   { name: 'Login', screen: LoginScreen },
-  { name: 'Register', screen: RegisterScreen }
-];
-
-// Rutas accesibles al autenticarse
-const routesAuth: Routes[] = [
+  { name: 'Register', screen: RegisterScreen },
   { name: 'Home', screen: HomeScreen },
-  {name: 'Info', screen: InfoEmployeeScreen, headerShown: true, title: 'Información'}
+  { name: 'Info', screen: InfoEmployeeScreen, headerShown: true, title: 'Información del Usuario' }
 ];
 
 // Creamos el Stack
@@ -51,7 +47,7 @@ export const StackNavigator = () => {
       setIsLoading(false);
     })
   }, [])
-  
+
   return (
     <>
       {
@@ -59,27 +55,17 @@ export const StackNavigator = () => {
           <View style={styles.rootActivity}>
             <ActivityIndicator animating={true} size={35} />
           </View>
-        ): (
-          <Stack.Navigator>
+        ) : (
+          <Stack.Navigator initialRouteName={isAuth ? 'Home' : 'Login'}>
             {
-              !isAuth ?
-                routesNoAuth.map((item, index) => (
-                  <Stack.Screen 
-                    key={index}
-                    name={item.name}
-                    options={{headerShown: false}}
-                    component={item.screen}
-                  />
-                ))
-              :
-                routesAuth.map((item, index) => (
-                  <Stack.Screen 
-                    key={index}
-                    name={item.name}
-                    options={{headerShown: item.headerShown ?? false}}
-                    component={item.screen}
-                  />
-                ))
+              routes.map((item, index) => (
+                <Stack.Screen
+                  key={index}
+                  name={item.name}
+                  options={{ headerShown: item.headerShown ?? false, title: item.title }}
+                  component={item.screen}
+                />
+              ))
             }
           </Stack.Navigator>
         )
